@@ -59,13 +59,31 @@
 
     <!-- Mensajes de Feedback (Create/Update/Delete) -->
     <?php if (isset($_GET['message'])): ?>
-        <div class="message">
-            <?php
-            if ($_GET['message'] == 'created') echo 'Proyecto creado correctamente.';
-            if ($_GET['message'] == 'updated') echo 'Proyecto actualizado correctamente.';
-            if ($_GET['message'] == 'deleted') echo 'Proyecto eliminado correctamente.';
-            ?>
-        </div>
+        <?php
+        $msgType = $_GET['message'];
+        $alertClass = 'alert-info';
+        $msgText = '';
+
+        switch ($msgType) {
+            case 'created':
+                $alertClass = 'alert-success'; // Green
+                $msgText = 'Proyecto creado correctamente.';
+                break;
+            case 'updated':
+                $alertClass = 'alert-warning'; // Yellow
+                $msgText = 'Proyecto actualizado correctamente.';
+                break;
+            case 'deleted':
+                $alertClass = 'alert-danger'; // Red
+                $msgText = 'Proyecto eliminado correctamente.';
+                break;
+        }
+        ?>
+        <?php if ($msgText): ?>
+            <div class="alert <?php echo $alertClass; ?> fade show text-center" role="alert">
+                <?php echo $msgText; ?>
+            </div>
+        <?php endif; ?>
     <?php endif; ?>
 
     <!-- Botón Añadir (Solo Admin) -->
@@ -78,49 +96,51 @@
     <?php endif; ?>
 
     <!-- Tabla de Proyectos -->
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre del proyecto</th>
-                <th>Descripción</th>
-                <th>Lider del proyecto</th>
-                <th>Presupuesto</th>
-                <th>Fecha de inicio</th>
-                <th>Fecha de finalización</th>
-                <th>Finalizado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($proyectos as $proyecto): ?>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered">
+            <thead>
                 <tr>
-                    <td><?php echo $proyecto['id']; ?></td>
-                    <td><?php echo $proyecto['nombre']; ?></td>
-                    <td><?php echo $proyecto['descripcion']; ?></td>
-                    <td><?php echo $proyecto['lider']; ?></td>
-                    <td><?php echo $proyecto['presupuesto']; ?></td>
-                    <td><?php echo date('d/m/Y', strtotime($proyecto['fecha_inicio'])); ?></td>
-                    <td><?php echo date('d/m/Y', strtotime($proyecto['fecha_fin'])); ?></td>
-                    <td>
-                        <!-- Checkbox deshabilitado solo para visualización -->
-                        <input type="checkbox" <?php echo ($proyecto['finalizado'] === 'Sí' || $proyecto['finalizado'] == 1) ? 'checked' : ''; ?> disabled>
-                    </td>
-                    <td>
-                        <!-- Acciones (Solo Admin) -->
-                        <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'admin'): ?>
-                            <a href="index.php?action=edit&id=<?php echo $proyecto['id']; ?>" class="btn btn-warning">
-                                <i class="bi bi-pencil-square"> Editar</i>
-                            </a>
-                            <a href="index.php?action=delete&id=<?php echo $proyecto['id']; ?>" class="btn btn-danger">
-                                <i class="bi bi-trash"> Eliminar</i>
-                            </a>
-                        <?php endif; ?>
-                    </td>
+                    <th>ID</th>
+                    <th>Nombre del proyecto</th>
+                    <th>Descripción</th>
+                    <th>Lider del proyecto</th>
+                    <th>Presupuesto</th>
+                    <th>Fecha de inicio</th>
+                    <th>Fecha de finalización</th>
+                    <th>Finalizado</th>
+                    <th>Acciones</th>
                 </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <?php foreach ($proyectos as $proyecto): ?>
+                    <tr>
+                        <td><?php echo $proyecto['id']; ?></td>
+                        <td><?php echo $proyecto['nombre']; ?></td>
+                        <td><?php echo $proyecto['descripcion']; ?></td>
+                        <td><?php echo $proyecto['lider']; ?></td>
+                        <td><?php echo $proyecto['presupuesto']; ?></td>
+                        <td><?php echo date('d/m/Y', strtotime($proyecto['fecha_inicio'])); ?></td>
+                        <td><?php echo date('d/m/Y', strtotime($proyecto['fecha_fin'])); ?></td>
+                        <td>
+                            <!-- Checkbox deshabilitado solo para visualización -->
+                            <input type="checkbox" <?php echo ($proyecto['finalizado'] === 'Sí' || $proyecto['finalizado'] == 1) ? 'checked' : ''; ?> disabled>
+                        </td>
+                        <td>
+                            <!-- Acciones (Solo Admin) -->
+                            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'admin'): ?>
+                                <a href="index.php?action=edit&id=<?php echo $proyecto['id']; ?>" class="btn btn-warning">
+                                    <i class="bi bi-pencil-square"> Editar</i>
+                                </a>
+                                <a href="index.php?action=delete&id=<?php echo $proyecto['id']; ?>" class="btn btn-danger">
+                                    <i class="bi bi-trash"> Eliminar</i>
+                                </a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 
     <!-- ============================================
          SCRIPTS JAVASCRIPT

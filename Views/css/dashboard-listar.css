@@ -1,0 +1,28 @@
+/* Estilos comunes movidos a dashboard-common.css */
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.botonDerecha {
+    display: block;
+    justify-content: right;
+}
+
+.message {
+    color: green;
+    margin-bottom: 10px;
+}

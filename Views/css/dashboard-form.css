@@ -1,0 +1,22 @@
+/* Estilos comunes movidos a dashboard-common.css */
+
+.container {
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(128, 128, 128, 0.5);
+}
+
+
+
+form {
+    margin: 20px;
+    text-align: center;
+}
+
+label {
+    margin: 10px;
+}
+
+button {
+    margin: 10px;
+}

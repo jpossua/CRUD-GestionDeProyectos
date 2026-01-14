@@ -1,0 +1,31 @@
+# ==============================================================================
+# ARCHIVO .GITIGNORE
+# ==============================================================================
+# Este archivo le dice a Git qué archivos o carpetas debe IGNORAR.
+# Los archivos listados aquí NO se subirán al repositorio (GitHub/GitLab).
+#
+# Útil para:
+# 1. Seguridad: Evitar subir contraseñas (.env)
+# 2. Limpieza: No subir archivos temporales o carpetas pesadas (/vendor)
+# ==============================================================================
+
+# --- SEGURIDAD ---
+# Ignorar variables de entorno con contraseñas
+.env
+.env.backup
+.env.local
+
+# --- DEPENDENCIAS ---
+# Ignorar librerías de terceros (se instalan con composer install)
+/vendor/
+
+# --- SISTEMA ---
+# Archivos basura generados por el SO
+Thumbs.db
+.DS_Store
+
+# --- IDEs ---
+# Configuraciones personales del editor de código
+.vscode/
+.idea/
+*.swp

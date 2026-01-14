@@ -283,6 +283,64 @@ public function create()
 
 ---
 
+### 9. Límite de Intentos de Login
+Protección contra fuerza bruta. Bloquea el acceso temporalmente (15 min) tras 5 intentos fallidos.
+
+**Archivo:** `Config/SecurityHelper.php`
+
+> <sub>php</sub>
+
+```php
+if ($_SESSION['login_attempts'] >= self::MAX_LOGIN_ATTEMPTS) {
+    // Bloquear usuario...
+}
+```
+
+---
+
+### 10. Límite de Tiempo de Sesión
+La sesión expira automáticamente tras 2 horas de inactividad absoluta para minimizar riesgos de olvido.
+
+**Archivo:** `Config/SessionConfig.php`
+
+> <sub>php</sub>
+
+```php
+$session_max_lifetime = 7200; // 2 horas
+if (time() - $_SESSION['session_created'] >= $session_max_lifetime) {
+    session_destroy();
+}
+```
+
+---
+
+### 11. Regeneración de ID de Sesión
+Se regenera el ID de sesión cada 20 minutos para prevenir ataques de "Session Fixation".
+
+**Archivo:** `Config/SessionConfig.php`
+
+> <sub>php</sub>
+
+```php
+if (time() - $_SESSION['last_regeneration'] >= 1200) {
+    session_regenerate_id(true);
+}
+```
+
+---
+
+### 12. Logout Seguro
+Limpieza completa: destruye la sesión en el servidor y fuerza la expiración de la cookie en el navegador.
+
+**Archivo:** `Controllers/AuthController.php`
+
+> <sub>php</sub>
+
+```php
+setcookie(session_name(), '', time() - 42000, ...); // Borra cookie
+session_destroy(); // Borra sesión
+```
+
 ## Instalación y Credenciales
 
 ### 1. Base de Datos

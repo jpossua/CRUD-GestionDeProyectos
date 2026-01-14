@@ -28,4 +28,6 @@ Thumbs.db
 # Configuraciones personales del editor de código
 .vscode/
 .idea/
+.antigravity/
+.gemini/
 *.swp

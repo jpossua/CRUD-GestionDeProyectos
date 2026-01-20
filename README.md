@@ -76,30 +76,29 @@ CRUD-GestionDeProyectos/
 ### Flujo de la Aplicación
 
 ```
-┌─────────────────┐
-│    index.php    │  ← Controlador Frontal: Recibe TODOS los requests
-│ (enrutamiento)  │     e instancia el controlador necesario
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  SessionConfig  │  ← Inicia sesión segura, verifica timeouts y
-│ SecurityHelper  │     valida tokens CSRF antes de procesar nada
-└────────┬────────┘
-         │
-         ▼
-┌───────────────────────────┐         ┌───────────────────────────┐
-│      Controladores        │         │         Modelos           │
-│ - AuthController          │ ──────▶ │ - User (login-php)        │
-│ - GestionController       │ ◀────── │ - Proyecto (gestion_proy) │
-└────────┬──────────────────┘         └───────────────────────────┘
-         │
-         ▼
-┌───────────────────────────┐
-│         Vistas            │
-│  HTML5 + CSS3 Modular     │  ← Renderiza la respuesta al usuario
-│    + Bootstrap 5          │
-└───────────────────────────┘
+┌─────────────────────────────┐
+│          index.php          │
+│   (Front Controller)        │
+│ 1. Carga SessionConfig.php  │  ← Inicia sesión segura (HttpOnly/Secure)
+│ 2. Enrutamiento (Routing)   │     y decide qué Controlador instanciar
+└──────────────┬──────────────┘
+               │
+               ▼
+┌─────────────────────────────┐         ┌───────────────────────────┐
+│       Controladores         │         │         Modelos           │
+│ - AuthController            │ ──────▶ │ - User (login-php)        │
+│ - GestionController         │ ◀────── │ - Proyecto (gestion_proy) │
+│                             │         └───────────────────────────┘
+│ * Validan Inputs (Sanitize) │
+│ * Validan CSRF (Security)   │  ← SecurityHelper se usa aquí
+└──────────────┬──────────────┘
+               │
+               ▼
+┌─────────────────────────────┐
+│           Vistas            │
+│    HTML5 + CSS3 Modular     │  ← Renderiza la respuesta al usuario
+│      + Bootstrap 5          │
+└─────────────────────────────┘
 ```
 
 ### Descripción de Componentes

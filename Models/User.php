@@ -41,7 +41,7 @@ class Usuario
      */
     public function __construct()
     {
-        $database = new Database('login-php');
+        $database = new Database();
         $this->PDO = $database->getConnection();
     }
 

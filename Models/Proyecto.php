@@ -41,7 +41,7 @@ class Proyecto
     {
         // Conectamos a la base de datos 'gestion_proyectos'
         require_once 'Config/Database.php';
-        $database = new Database('gestion_proyectos');
+        $database = new Database();
         $this->PDO = $database->getConnection();
     }
 

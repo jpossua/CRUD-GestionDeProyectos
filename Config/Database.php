@@ -50,7 +50,7 @@ class Database
      * Constructor
      * @param string|null $db_name Nombre de la base de datos (opcional)
      */
-    public function __construct($db_name = 'login-php')
+    public function __construct($db_name = 'gestion_proyectos')
     {
         $this->db_name = $db_name;
     }

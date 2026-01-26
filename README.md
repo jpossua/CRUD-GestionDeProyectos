@@ -38,7 +38,7 @@ El proyecto sigue el patrón **Modelo-Vista-Controlador** para separar responsab
 ```
 CRUD-GestionDeProyectos/
 ├── Config/                        # Configuración y Seguridad
-│   ├── Database.php               # Conexión PDO a las 2 bases de datos
+│   ├── Database.php               # Conexión PDO a la base de datos única (gestion_proyectos)
 │   ├── SessionConfig.php          # Configuración de cookies y sesiones seguras
 │   └── SecurityHelper.php         # Sanitización y protección CSRF
 │
@@ -47,7 +47,7 @@ CRUD-GestionDeProyectos/
 │   └── GestionController.php      # Lógica CRUD de Proyectos
 │
 ├── Models/                        # Acceso a Datos
-│   ├── User.php                   # Modelo de usuarios (db: login-php)
+│   ├── User.php                   # Modelo de usuarios (db: gestion_proyectos)
 │   └── Proyecto.php               # Modelo de proyectos (db: gestion_proyectos)
 │
 ├── Views/                         # Interfaz de Usuario
@@ -66,8 +66,7 @@ CRUD-GestionDeProyectos/
 │       └── temaOscuro.js          # Lógica del modo oscuro
 │
 ├── database/                      # Scripts SQL
-│   ├── login-php.sql              # Estructura y datos de Usuarios
-│   └── gestion_proyectos.sql      # Estructura y datos de Proyectos
+│   └── gestion_proyectos.sql      # Estructura y datos UNIFICADOS (Usuarios y Proyectos)
 │
 ├── index.php                      # Front Controller (Enrutador Único)
 └── README.md                      # Documentación Técnica
@@ -86,8 +85,8 @@ CRUD-GestionDeProyectos/
                ▼
 ┌─────────────────────────────┐         ┌───────────────────────────┐
 │       Controladores         │         │         Modelos           │
-│ - AuthController            │ ──────▶ │ - User (login-php)        │
-│ - GestionController         │ ◀────── │ - Proyecto (gestion_proy) │
+│ - AuthController            │ ──────▶ │ - User (gestion_pr)     │
+│ - GestionController         │ ◀────── │ - Proyecto (gestion_pr) │
 │                             │         └───────────────────────────┘
 │ * Validan Inputs (Sanitize) │
 │ * Validan CSRF (Security)   │  ← SecurityHelper se usa aquí
@@ -107,7 +106,7 @@ CRUD-GestionDeProyectos/
 *   **`index.php`**: El **Controlador Frontal**. Recibe todas las peticiones, inicializa la sesión segura y decide qué controlador debe manejar la solicitud en función del parámetro `action`.
 
 **2. Configuración y Seguridad:**
-*   **`Database.php`**: Gestiona las conexiones PDO. Permite conectar tanto a la BD de usuarios (`login-php`) como a la de proyectos (`gestion_proyectos`) de forma centralizada.
+*   **`Database.php`**: Gestiona las conexiones PDO. Conecta a la base de datos unificada (`gestion_proyectos`).
 *   **`SessionConfig.php`**: Configura los parámetros de seguridad de las cookies (HttpOnly, Secure, SameSite) y maneja los tiempos de expiración y regeneración de IDs.
 *   **`SecurityHelper.php`**: Librería de utilidades estáticas para sanitizar inputs (`sanitizeInput`), validar tokens CSRF y controlar intentos de login.
 
@@ -116,7 +115,7 @@ CRUD-GestionDeProyectos/
 *   **`GestionController`**: Administra el núcleo del CRUD. Verifica si el usuario tiene permiso (Admin) antes de crear, editar o eliminar proyectos, y prepara los datos para las vistas.
 
 **4. Modelos (Datos):**
-*   **`User`**: Interactúa con la base de datos `login-php`. Se encarga de verificar si un usuario existe y validar sus contraseñas (hash).
+*   **`User`**: Interactúa con la tabla usuarios en `gestion_proyectos`. Se encarga de verificar si un usuario existe y validar sus contraseñas (hash).
 *   **`Proyecto`**: Interactúa con la base de datos `gestion_proyectos`. Encapsula todas las consultas SQL (INSERT, SELECT, UPDATE, DELETE) para mantener la integridad de los datos.
 
 **5. Vistas (Interfaz):**
@@ -347,10 +346,9 @@ Los scripts SQL incluyen la sentencia `CREATE DATABASE`, por lo que **no es nece
 
 1.  Accede a **phpMyAdmin** (normalmente [http://localhost/phpmyadmin](http://localhost/phpmyadmin)).
 2.  Ve directamente a la pestaña superior **"Importar"** (sin seleccionar ninguna base de datos a la izquierda).
-3.  Selecciona el archivo `database/login-php.sql` y pulsa **Continuar**.
-4.  **Repite el proceso** importando el archivo `database/gestion_proyectos.sql`.
+3.  Selecciona el archivo `database/gestion_proyectos.sql` y pulsa **Continuar**.
 
-*Ambas bases de datos (`login-php` y `gestion_proyectos`) y el usuario de conexión (`LoginPhp`) se crearán automáticamente.*
+*La base de datos `gestion_proyectos`, las tablas unificadas (`usuarios`, `proyectos`) y el usuario de conexión se crearán automáticamente.*
 
 ### 2. Configuración de Conexión (Informativo)
 La aplicación viene pre-configurada en `Config/Database.php` para usar el usuario que el script acaba de crear. **No es necesario configurar nada más**, pero aquí tienes los datos por si necesitas consultarlos o el script falla:

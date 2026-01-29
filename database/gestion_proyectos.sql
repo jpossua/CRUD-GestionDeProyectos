@@ -5,15 +5,13 @@
 -- Incluye tablas de usuarios (Login) y proyectos.
 -- ============================================
 
--- Desactivar notas para evitar errores falsos (como #1008)
-SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0;
-
 -- ============================================
 -- 1. CREACIÓN DE LA BASE DE DATOS
 -- ============================================
 
--- Recrear la base de datos para asegurar un estado limpio
-DROP DATABASE IF EXISTS `gestion_proyectos`;
+-- No eliminamos la base de datos completa para evitar notas de error si no existe.
+-- DROP DATABASE IF EXISTS `gestion_proyectos`;
+-- Simplemente la creamos si hace falta y luego limpiamos las tablas.
 CREATE DATABASE IF NOT EXISTS `gestion_proyectos` 
   DEFAULT CHARACTER SET utf8mb4 
   COLLATE utf8mb4_spanish_ci;
@@ -27,6 +25,7 @@ USE `gestion_proyectos`;
 -- --------------------------------------------------------
 -- TABLA: usuarios
 -- --------------------------------------------------------
+DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE `usuarios` (
   `codUser` int(11) NOT NULL AUTO_INCREMENT,
   `idUser` varchar(20) NOT NULL,
@@ -41,6 +40,7 @@ CREATE TABLE `usuarios` (
 -- --------------------------------------------------------
 -- TABLA: proyectos
 -- --------------------------------------------------------
+DROP TABLE IF EXISTS `proyectos`;
 CREATE TABLE `proyectos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
@@ -86,6 +86,3 @@ ALTER USER 'LoginPhp'@'localhost' IDENTIFIED BY '95f90HZJy3sb';
 GRANT SELECT, INSERT, UPDATE, DELETE ON `gestion_proyectos`.* TO 'LoginPhp'@'localhost';
 
 FLUSH PRIVILEGES;
-
--- Restaurar configuración de notas
-SET SQL_NOTES=@OLD_SQL_NOTES;

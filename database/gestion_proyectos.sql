@@ -5,10 +5,14 @@
 -- Incluye tablas de usuarios (Login) y proyectos.
 -- ============================================
 
+-- Desactivar notas para evitar errores falsos (como #1008)
+SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0;
+
 -- ============================================
 -- 1. CREACIÓN DE LA BASE DE DATOS
 -- ============================================
 
+-- Recrear la base de datos para asegurar un estado limpio
 DROP DATABASE IF EXISTS `gestion_proyectos`;
 CREATE DATABASE IF NOT EXISTS `gestion_proyectos` 
   DEFAULT CHARACTER SET utf8mb4 
@@ -47,7 +51,7 @@ CREATE TABLE `proyectos` (
   `fecha_fin` date DEFAULT NULL,
   `finalizado` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 -- ============================================
 -- 3. VOLCADO DE DATOS (Demos)
@@ -72,9 +76,16 @@ INSERT INTO `proyectos` (`nombre`, `descripcion`, `lider`, `presupuesto`, `fecha
 -- Usuario con permisos limitados.
 -- ============================================
 
+-- Crear usuario si no existe
 CREATE USER IF NOT EXISTS 'LoginPhp'@'localhost' IDENTIFIED BY '95f90HZJy3sb';
+
+-- Asegurar que la contraseña sea la correcta (por si el usuario ya existía con otra)
+ALTER USER 'LoginPhp'@'localhost' IDENTIFIED BY '95f90HZJy3sb';
 
 -- Permisos
 GRANT SELECT, INSERT, UPDATE, DELETE ON `gestion_proyectos`.* TO 'LoginPhp'@'localhost';
 
 FLUSH PRIVILEGES;
+
+-- Restaurar configuración de notas
+SET SQL_NOTES=@OLD_SQL_NOTES;
